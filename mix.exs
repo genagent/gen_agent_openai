@@ -31,7 +31,7 @@ defmodule GenAgentOpenAI.MixProject do
 
   defp deps do
     [
-      {:gen_agent, "~> 0.2.0"},
+      {:gen_agent, "~> 0.2.0 or ~> 0.3.0"},
       {:req, "~> 0.7.4"},
       {:ex_doc, "~> 0.35", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},

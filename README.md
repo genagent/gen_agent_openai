@@ -52,7 +52,7 @@ environment, or pass `:api_key` as a backend option.
 ```elixir
 def deps do
   [
-    {:gen_agent, "~> 0.2.0"},
+    {:gen_agent, "~> 0.3.0"},
     {:gen_agent_openai, "~> 0.1.0"}
   ]
 end
