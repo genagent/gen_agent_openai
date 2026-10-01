@@ -84,6 +84,24 @@ defmodule GenAgent.Backends.OpenAITest do
       assert session.model == "gpt-5"
     end
 
+    test "receive_timeout defaults to 60_000 and connect_timeout uses Req's default" do
+      {:ok, session} = OpenAI.start_session(http_fn: ok_response("hi"))
+      assert session.receive_timeout == 60_000
+      assert session.connect_timeout == nil
+    end
+
+    test "accepts explicit receive and connect timeouts" do
+      {:ok, session} =
+        OpenAI.start_session(
+          receive_timeout: 180_000,
+          connect_timeout: 5_000,
+          http_fn: ok_response("hi")
+        )
+
+      assert session.receive_timeout == 180_000
+      assert session.connect_timeout == 5_000
+    end
+
     test "accepts all options" do
       {:ok, session} =
         OpenAI.start_session(
@@ -102,6 +120,36 @@ defmodule GenAgent.Backends.OpenAITest do
   end
 
   describe "prompt/2 request shape" do
+    test "passes explicit timeouts to custom HTTP functions" do
+      ref = make_ref()
+
+      {:ok, session} =
+        OpenAI.start_session(
+          receive_timeout: 120_000,
+          connect_timeout: 5_000,
+          http_fn: recording_fn(ref, ok_response("pong"))
+        )
+
+      {:ok, _events, _session} = OpenAI.prompt(session, "ping")
+
+      assert_receive {^ref, request}
+      assert request.receive_timeout == 120_000
+      assert request.connect_timeout == 5_000
+    end
+
+    test "passes default timeout values to custom HTTP functions" do
+      ref = make_ref()
+
+      {:ok, session} =
+        OpenAI.start_session(http_fn: recording_fn(ref, ok_response("pong")))
+
+      {:ok, _events, _session} = OpenAI.prompt(session, "ping")
+
+      assert_receive {^ref, request}
+      assert request.receive_timeout == 60_000
+      assert request.connect_timeout == nil
+    end
+
     test "sends input as a single-element array of {role, content}" do
       ref = make_ref()
 
