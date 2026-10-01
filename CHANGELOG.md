@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/genagent/gen_agent_openai/compare/v0.1.1...v0.2.0) (2026-10-01)
+
+
+### Features
+
+* configure OpenAI HTTP timeouts ([#16](https://github.com/genagent/gen_agent_openai/issues/16)) ([baafe8c](https://github.com/genagent/gen_agent_openai/commit/baafe8cb9eef6af40bb32843a356a8a7c05265c0))
+
 ## [0.1.1](https://github.com/genagent/gen_agent_openai/compare/v0.1.0...v0.1.1) (2026-10-01)
 
 
